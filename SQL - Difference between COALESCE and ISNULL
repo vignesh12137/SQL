@@ -1,0 +1,4 @@
+
+COALESCE() can have multiple inputs and it will evaluate in order until one of them is not null such as COALESCE(Col1, Col2, Col3, 'N/A'). It's recommended to use this by MS instead of ISNULL()
+
+ISNULL() can only have one input, however it's been shown to be slightly faster than COALESCE.
