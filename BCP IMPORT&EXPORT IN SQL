@@ -1,0 +1,49 @@
+----BCP  
+
+--IN(This option is used to import all the records to an existing table. This requires the table to be created before executing the BCP command)
+---OUT (This option is used to export (or dump) all the records from a table into a data file)
+--QUERYOUT(QL statement to generate a data dump)
+/*
+usage: bcp {dbtable | query} {in | out | queryout | format} datafile
+  [-m maxerrors]            [-f formatfile]          [-e errfile]
+  [-F firstrow]             [-L lastrow]             [-b batchsize]
+  [-n native type]          [-c character type]      [-w wide character type]
+  [-N keep non-text native] [-V file format version] [-q quoted identifier]
+  [-C code page specifier]  [-t field terminator]    [-r row terminator]
+  [-i inputfile]            [-o outfile]             [-a packetsize]
+  [-S server name]          [-U username]            [-P password]
+  [-T trusted connection]   [-v version]             [-R regional enable]
+  [-k keep null values]     [-E keep identity values][-G Azure Active Directory Authentication]
+  [-h "load hints"]         [-x generate xml format file]
+  [-d database name]        [-K application intent]  [-l login timeout]
+
+*/
+---EXPORT BCP 
+--c -- code page specifier
+--t -- filed terminator 
+--T -- Windows authentication
+--S-- servername
+
+---QUERYOUT
+declare @sql varchar(8000)
+
+set @sql ='bcp "select * from scmdb.dbo.SALGRADE " queryout H:\sql\testnew.txt -c -t, -T -S ' -- @@SERVERNAME 
+
+print @sql
+
+exec master..xp_cmdshell @sql
+
+select @@SERVERNAME 
+
+----OUT
+
+EXEC master..xp_cmdshell 'BCP scmdb.dbo.emp OUT H:\sql\vignesh1.csv  -c,-t, -T -S '
+
+---IMPORT BCP 
+
+----IN
+
+select @@servername
+
+EXEC master..xp_cmdshell  'bcp scmdb.dbo.SALGRADE in  H:\sql\testnew.csv -c -t,  -T -S VSYWARAUI02 -e H:\sql\erro.csv'
+
