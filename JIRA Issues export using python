@@ -1,0 +1,67 @@
+import jira.client
+from jira.client import JIRA
+import warnings
+warnings.filterwarnings('ignore', message='Unverified HTTPS request')
+from openpyxl import Workbook
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning) 
+
+options = {'server': 'https://test.com/', 'verify':False}
+jira = JIRA(options, basic_auth=('12137', '12137@12'))
+
+
+
+key_list = []
+summary_list = []
+assignee_list = []
+#Add additional lists for fields here
+#Example: 
+#description_list = []
+
+
+issues_in_project = jira.search_issues('project in (LIC) AND status="In Progress" and Assignee in (12137)')
+
+for issue in issues_in_project:
+    key_list.append(issue.key),
+    summary_list.append(issue.fields.summary),assignee_list.append(issue.fields.assignee)
+	
+
+# Add additional fields returned here
+# Example:
+#. description_list.append(issue.fields.description)
+
+
+wb = Workbook()
+ws = wb.active
+key_row = 1
+summary_row = 1
+assignee_row=1
+#add additional "$FIELD_row = 1" entries here so the field results start at row 1
+#Example:
+#description_row = 1
+
+
+start_column = 1
+
+
+for key in key_list:
+ ws.cell(row=key_row, column=start_column).value = key
+ key_row += 1
+
+for summary in summary_list:
+ ws.cell(row=summary_row, column=start_column+1).value = summary
+ summary_row += 1
+ 
+for assignee in assignee_list:
+ ws.cell(row=assignee_row, column=start_column+2).value = assignee.displayName
+ assignee_row += 1
+ 
+ 
+
+# add additional fields here 
+#Example:
+#for description in description_list:
+ # ws.cell(row=description_row, column=start_column+2).value = description
+ # description_row += 1
+
+wb.save("Visy.xlsx")
